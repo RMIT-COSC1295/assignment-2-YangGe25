@@ -1,9 +1,17 @@
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import MyTicket.FullMyTi;
+import MyTicket.JuniorMyTi;
+import MyTicket.SeniorMyTi;
+import Exceptions.UserDoesNotExist;
+
 public class MyTiSystem {
-	// create a new Scanner from standard input
-	static Scanner sc = new Scanner(System.in);
+	
+	final static double CREDIT_LIMIT = 100.0;  // maximum allowed credit
+	final static int LEGAL_MULTIPLE = 5; // multiple that we can re-charge by
+	
+	static Scanner sc = new Scanner(System.in);// create a new Scanner from standard input
 	
 	/**
 	 * main program for assignment
@@ -78,11 +86,56 @@ public class MyTiSystem {
 		System.out.println("1");
 	}
 	static void recharge() {
-		System.out.println("2");
+		System.out.println();
+		System.out.println("User ID?");
+		String id = sc.next().strip();
+		double credit = 0.0;
+		String type = User.getUserType(id);
+		try{
+			if (type == "Adult") {credit = FullMyTi.getTicketCredit(id);}
+			else if (type == "Junior") {credit = JuniorMyTi.getTicketCredit(id);}
+			else if (type == "Senior") {credit = SeniorMyTi.getTicketCredit(id);}
+		} catch(Exception e) {System.out.println("User doesn't exist!");}
+		
+		System.out.println("How much credit do you want to add: ");
+		double amt = sc.nextDouble();
+		
+		if(amt < 0) {
+			System.out.println("Please input a positive amount!");
+			recharge();
+		}else if ((credit + amt) > CREDIT_LIMIT) {
+			System.out.println("That takes you over the credit limit. Please enter a smaller amount.");
+			recharge();
+		} else if (amt % LEGAL_MULTIPLE != 0) {
+			System.out.println("Charge amounts must be in multiples of " + LEGAL_MULTIPLE + ".");
+			recharge();
+		} else { // valid amount --> add to the MyTi credit
+			if (type == "Adult") {FullMyTi.topUp(id,amt);}
+			else if (type == "Junior") {JuniorMyTi.topUp(id,amt);}
+			else if (type == "Senior") {SeniorMyTi.topUp(id,amt);}
+			System.out.printf("Successfully added %.2f to %s\n", amt, id);
+		}
+		
 	}
+	
 	static void showCredit() {
-		System.out.println("3");
+		/*
+		 * Display the remaining credit of specific user
+		 */
+		System.out.println();
+		System.out.println("User ID?");
+		String id = sc.next().strip();
+		try{
+			String type = User.getUserType(id);
+			double credit = 0.0;
+			if (type == "Adult") {credit = FullMyTi.getTicketCredit(id);}
+			else if (type == "Junior") {credit = JuniorMyTi.getTicketCredit(id);}
+			else if (type == "Senior") {credit = SeniorMyTi.getTicketCredit(id);}
+			System.out.printf("%s's remaining credit is $%.2f\n ", id, credit);
+		} catch(Exception e) {System.out.println("User doesn't exist!");}
+		
 	}
+	
 	static void printUserReports() {
 		System.out.println("4");
 	}
@@ -109,7 +162,7 @@ public class MyTiSystem {
 		System.out.println("Name?");
 		String name = sc.next().strip();
 		
-		System.out.println("Type?");
+		System.out.println("Type?(Choose from Adult,Junior and Senior)");
 		String type= sc.next().strip();
 				
 		ArrayList<String> lst = new ArrayList();

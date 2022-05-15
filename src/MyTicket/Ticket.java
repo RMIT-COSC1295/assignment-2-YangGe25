@@ -13,19 +13,21 @@ public abstract class Ticket {
 	
 	public String getTicketID() {return this.id;}
 	public double getCredit() {return this.credit;}
+	public void setCredit(double credit) {this.credit=credit;}
 	
 	
 	public static void addTicket(String id){
-		// add a new ticket, and put it into a HashMap whose key is id, and value credit
+		// add a new ticket, and put it into a HashMap whose key is id, and value is Ticket
 	}
 	
-	public static void showTicketInfo(String id) {
-		//print the information of specific user
+	public static double getTicketCredit(String id) {
+		return 0.0;
+		//print the credit of a specific user
+	}
+	
+	public static void topUp(String id) {
+		//print the credit of a specific user
 	}
 
-	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-
-	}
 
 }

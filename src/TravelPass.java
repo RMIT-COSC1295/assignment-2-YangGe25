@@ -1,10 +1,10 @@
 
-public class Journey {
+public class TravelPass {
 	
 	private int startTime,endTime;
 	private String day,startStation,endStation;
 	
-	Journey(int startTime,int endTime,String day,String startStation,String endStation){
+	TravelPass(int startTime,int endTime,String day,String startStation,String endStation){
 		this.startTime = startTime;
 		this.endTime = endTime;
 		this.day = day;

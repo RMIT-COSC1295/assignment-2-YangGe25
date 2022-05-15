@@ -10,20 +10,24 @@ public class JuniorMyTi extends Ticket implements Consession{
 	static HashMap<String,JuniorMyTi> juniorMyTis = new HashMap<String,JuniorMyTi>();
 	
 	public static void addTicket(String id){
-		// add a new ticket, and put it into a HashMap whose key is id, and value credit
+		// add a new ticket, and put it into a HashMap whose key is id, and value is JuniorMyTi
 		JuniorMyTi newJuniorMyTi = new JuniorMyTi(id);
 		juniorMyTis.put(id,newJuniorMyTi);
 	}
 	
-	public static void showTicketInfo(String id) {
-		//print the information of specific user
-		if (juniorMyTis.containsKey(id)) {System.out.println("id: " + id + ", credit: " + juniorMyTis.get(id).getCredit());}
-		else {System.out.println("User doesn't exist!");}
+	public static double getTicketCredit(String id) {
+		//print the credit of a specific JuniorMyTi user
+		return juniorMyTis.get(id).getCredit();
 	}
 	
-	public static void main(String[] args) {
-
+	public static void topUp(String id, double amt) {
+		// Top up the ticket of a specific JuniorMyTi user
+			double credit= juniorMyTis.get(id).getCredit();
+			double newCredit = credit + amt;
+			juniorMyTis.get(id).setCredit(newCredit);
 	}
+	
+
 
 	@Override
 	public double getDiscountRate() {return discountRate;}

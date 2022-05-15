@@ -11,19 +11,23 @@ public class SeniorMyTi extends Ticket implements Consession{
 	
 	
 	public static void addTicket(String id){
-		// add a new ticket, and put it into a HashMap whose key is id, and value credit
+		// add a new ticket, and put it into a HashMap whose key is id, and value is SeniorMyTi
 		SeniorMyTi newSeniorMyTi = new SeniorMyTi(id);
 		seniorMyTis.put(id,newSeniorMyTi);
 	}
 	
-	public static void showTicketInfo(String id) {
-		//print the information of specific user
-		if (seniorMyTis.containsKey(id)) {System.out.println("id: " + id + ", credit: " + seniorMyTis.get(id).getCredit());}
-		else {System.out.println("User doesn't exist!");}
+	public static double getTicketCredit(String id){
+		//print the credit of a specific SeniorMyTi user
+		return seniorMyTis.get(id).getCredit();
 	}
 	
-	public static void main(String[] args) {
+	public static void topUp(String id, double amt) {
+		// Top up the ticket of a specific JuniorMyTi user
+			double credit= seniorMyTis.get(id).getCredit();
+			double newCredit = credit + amt;
+			seniorMyTis.get(id).setCredit(newCredit);
 	}
+	
 
 
 	@Override

@@ -33,47 +33,22 @@ public class User {
 		if(!users.containsKey(id)) {
 			User newUser = new User(id,name,type,email);
 			users.put(id, newUser);
-			if (type == "Adult") {
-				FullMyTi.addTicket(id);
-			}
-			else if (type == "Junior") {
-				JuniorMyTi.addTicket(id);
-			}
-			else if (type == "Senior") {
-				SeniorMyTi.addTicket(id);
-			}
-			System.out.println(id + " added successfully!");
-		}
+			if (type == "Adult") {FullMyTi.addTicket(id);}
+			else if (type == "Junior") {JuniorMyTi.addTicket(id);}
+			else if (type == "Senior") {SeniorMyTi.addTicket(id);}
+			System.out.println(id + " has been added successfully!");}
 		else {System.out.println("User ID already exists!");}
 	}
 	
-	public void printUser(String id) {
-		//print the purchases of a user
+	static String getUserType(String id) {
+		// Return the type of a specific user
+			String type = users.get(id).getType();
+			return type;
 	}
 	
-	public static void showUserInfo() {
-		//print the information of all users
-		for (String i : users.keySet()) {
-            System.out.println("id: " + i + ", name: " + users.get(i).getName()+ ", type: " + users.get(i).getType());
-        }
-	}
+
 	
 	
 	
-	public static void main(String[] args){
-		
-		User.addUser("lc", "Lawrence Cavedon",  "Senior", "lawrence.cavedon@rmit.edu.au");
-		User.addUser("vm", "Vu Mai", "Adult", "vuhuy.mai@rmit.edu.au");
-		User.addUser("gy","Ge Yang","Junior","s3911292@student.rmit.edu.au");
-		User.addUser("gb","Ge Yang","Junior","s3911292@student.rmit.edu.au");
-		
-		//User.showUserInfo();
-			
-		SeniorMyTi.showTicketInfo("lc");
-		FullMyTi.showTicketInfo("vm");
-		JuniorMyTi.showTicketInfo("gy");
-		JuniorMyTi.showTicketInfo("gb");
-		JuniorMyTi.showTicketInfo("db");
-        }
 
 	}
