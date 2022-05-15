@@ -1,10 +1,10 @@
 import java.util.ArrayList;
+
 import java.util.Scanner;
 
 import MyTicket.FullMyTi;
 import MyTicket.JuniorMyTi;
 import MyTicket.SeniorMyTi;
-import Exceptions.UserDoesNotExist;
 
 public class MyTiSystem {
 	
@@ -16,6 +16,7 @@ public class MyTiSystem {
 	/**
 	 * main program for assignment
 	 * - this contains the main menu loop
+	 * @throws InvalidInput 
 	 */
 	public static void main(String[] args) {
 		// Add three types of users 
@@ -23,7 +24,7 @@ public class MyTiSystem {
 		User.addUser("vm", "Vu Mai", "Adult", "vuhuy.mai@rmit.edu.au");
 		User.addUser("gy","Ge Yang","Junior","s3911292@student.rmit.edu.au");
 		// Add five stations as required in the specification
-		Station.addStation("Cental", 1);
+		Station.addStation("Central", 1);
 		Station.addStation("Flagstaff", 1);
 		Station.addStation("Richmond", 1);
 		Station.addStation("Lilydale", 2);
@@ -31,8 +32,7 @@ public class MyTiSystem {
 		// main menu loop: print menu, then do something depending on selection
 		boolean invalidInput = true;
 		do {
-			printMainMenu();
-			
+			printMainMenu();	
 			int option = 0;
 			try {
 				option = Integer.parseInt(sc.next());
@@ -40,7 +40,7 @@ public class MyTiSystem {
 				boolean index = false;
 				for(int i=0;i<validInput.length;i++) {if (validInput[i] == option ) {index = true;}}
 				if (!index){System.out.println("Please input an integer from 1 to 8!\n");}
-				} catch(Exception e) {System.out.println("Please input an integer!\n");}
+				} catch(Exception e) {System.out.println("Please input a valid option!\n");}
 			// perform correct action, depending on selection	
 		switch (option) {
 			case 1: purchasePass();
@@ -79,42 +79,73 @@ public class MyTiSystem {
 		System.out.println("6. Show Station statistics");
 		System.out.println("7. Add a new User");
 		System.out.println("8. Quit");
-		System.out.print("Your option: ");
+		System.out.println("Your option: ");
 	}
 	
 	static void purchasePass() {
-		System.out.println("1");
-	}
-	static void recharge() {
-		System.out.println();
-		System.out.println("User ID?");
+		System.out.println("\nUser ID:");
 		String id = sc.next().strip();
-		double credit = 0.0;
-		String type = User.getUserType(id);
+		String type = null;
+		// check if the id is valid
 		try{
+			type = User.getUserType(id);
+		} catch(Exception e) {System.out.println("User doesn't exist!");return;}
+		// check if the station is valid
+		ArrayList<String> stations= new ArrayList<String>();
+		stations.add("Central");stations.add("Flagstaff");stations.add("Richmond");stations.add("Lilydale");stations.add("Epping");
+		System.out.println("From what station:");
+		String startStation = sc.next().strip();
+		if (!stations.contains(startStation)) {System.out.println("Please enter a valid Station Name!");return;}
+		System.out.println("To what station:");
+		String endStation = sc.next().strip();
+		if (!stations.contains(endStation)){System.out.println("Please enter a valid Station Name!");return;}
+		if (startStation.equals(endStation)){System.out.println("Strat Station can't be the same as End Station!");return;}
+		// check if the day is valid
+		ArrayList<String> days= new ArrayList<String>();
+		days.add("Mon");days.add("Tue");days.add("Wed");days.add("Thur");days.add("Fri");days.add("Sat");days.add("Sun");
+		System.out.println("What day:");
+		String day = sc.next().strip();
+		if (!days.contains(day)) {System.out.println("Please enter a valid day!");return;}
+		// check if the station is valid
+		System.out.println("Departure time: ");
+		int startTime;
+		try {startTime = Integer.parseInt(sc.next());} catch(Exception e) {System.out.println("Please enter a valid time!");return;}
+		if (startTime < 0 || startTime>2359) {System.out.println("Please enter a valid time!");return;}
+		System.out.println("Arrival time: ");
+		int endTime;
+		try {endTime = Integer.parseInt(sc.next());} catch(Exception e) {System.out.println("Please enter a valid time!");return;}
+		if (endTime < 0 || endTime>2359) {System.out.println("Please enter a valid time!");return;}
+		if (startTime >= endTime) {System.out.println("Departure time must be prior to arrival time!");return;}
+		
+		TravelPass.purchase(id, type, startStation, endStation, startTime, endTime, day);
+	}
+	
+	static void recharge() {
+		System.out.println("\nUser ID:");
+		String id = sc.next();
+		double credit = 0.0;
+		String type = "";
+		try{type = User.getUserType(id);
 			if (type == "Adult") {credit = FullMyTi.getTicketCredit(id);}
 			else if (type == "Junior") {credit = JuniorMyTi.getTicketCredit(id);}
 			else if (type == "Senior") {credit = SeniorMyTi.getTicketCredit(id);}
-		} catch(Exception e) {System.out.println("User doesn't exist!");}
+			} catch(Exception e) {System.out.println("User doesn't exist!");return;}
 		
 		System.out.println("How much credit do you want to add: ");
-		double amt = sc.nextDouble();
-		
+		try{double amt = sc.nextDouble();
 		if(amt < 0) {
 			System.out.println("Please input a positive amount!");
-			recharge();
 		}else if ((credit + amt) > CREDIT_LIMIT) {
 			System.out.println("That takes you over the credit limit. Please enter a smaller amount.");
-			recharge();
 		} else if (amt % LEGAL_MULTIPLE != 0) {
 			System.out.println("Charge amounts must be in multiples of " + LEGAL_MULTIPLE + ".");
-			recharge();
 		} else { // valid amount --> add to the MyTi credit
 			if (type == "Adult") {FullMyTi.topUp(id,amt);}
 			else if (type == "Junior") {JuniorMyTi.topUp(id,amt);}
 			else if (type == "Senior") {SeniorMyTi.topUp(id,amt);}
 			System.out.printf("Successfully added %.2f to %s\n", amt, id);
 		}
+		} catch(Exception e) {System.out.println("Please enter an integer!");}
 		
 	}
 	
@@ -122,8 +153,7 @@ public class MyTiSystem {
 		/*
 		 * Display the remaining credit of specific user
 		 */
-		System.out.println();
-		System.out.println("User ID?");
+		System.out.println("\nUser ID:");
 		String id = sc.next().strip();
 		try{
 			String type = User.getUserType(id);
@@ -139,14 +169,59 @@ public class MyTiSystem {
 	static void printUserReports() {
 		System.out.println("4");
 	}
+	
+	
+	/*
+	 *  Update the price of TravelPass 
+	 */
 	static void updatePrice() {
-		System.out.println("5");
+		// print period options
+		System.out.println("\nWhat period?");
+		System.out.println("a. 2 Hours");
+		System.out.println("b. All Day");
+		System.out.println("c. cancel");
+		System.out.println("Your selection: ");
+		String period = sc.next();
+		if (period .equals("c")) return;  // cancel
+		// print zones options
+		System.out.println("For which zone(s)?");
+		System.out.println("a. Zone 1");
+		System.out.println("b. Zone 2");
+		System.out.println("c. Zones 1 and 2");
+		System.out.println("d. cancel");
+		System.out.println("Your selection: ");
+		String zones = sc.next();
+		if (zones.equals("d")) return;    // cancel
+	
+		// first check if valid options were selected
+				if ((!period.equals("a") && !period.equals("b"))
+						|| (!zones.equals("a") && !zones.equals("b") && !zones.equals("c"))) {
+					System.out.println("\nYou have selected an illegal option. Please try again.");
+					// if not, then re-try updating price
+					updatePrice();
+				} else {
+					// print new price
+					System.out.println("What is the new price?");
+					double price = sc.nextDouble();
+					if(price <= 0.0) {
+						// new price should be larger than 0
+						System.out.println("You need to set a positive price!");
+						updatePrice();
+					}
+					else TravelPass.setPrice(period, zones, price);
+				}	
 	}
+	
+	
+	/*
+	 *  Display the statistics of all Stations
+	 */
 	static void showStatistics() {
-		System.out.println("6");
+		
+		Station.showStationInfo();
 	}
 
-
+	
 	/*
 	 * Add a new user
 	 */
@@ -156,13 +231,13 @@ public class MyTiSystem {
 		 * Type should be "Adult","Junior" or "Senior"
 		 */
 		System.out.println();
-		System.out.println("User ID?");
+		System.out.println("User ID:");
 		String id = sc.next().strip();
 		
-		System.out.println("Name?");
+		System.out.println("Name:");
 		String name = sc.next().strip();
 		
-		System.out.println("Type?(Choose from Adult,Junior and Senior)");
+		System.out.println("Type:(Choose from Adult,Junior and Senior)");
 		String type= sc.next().strip();
 				
 		ArrayList<String> lst = new ArrayList();
@@ -170,7 +245,7 @@ public class MyTiSystem {
 		lst.add("Senior");
 		lst.add("Junior");
 		if(lst.contains(type)) {
-			System.out.println("Email?");
+			System.out.println("Email:");
 			String email = sc.next().strip();
 			User.addUser(id, name, type, email);}
 		else{System.out.println("Wrong Type!");}
