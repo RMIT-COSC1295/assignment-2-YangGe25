@@ -29,5 +29,10 @@ public abstract class Ticket {
 		//print the credit of a specific user
 	}
 
+	public double getDiscountRate() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 
 }

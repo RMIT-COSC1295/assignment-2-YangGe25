@@ -2,6 +2,8 @@ package MyTicket;
 
 import java.util.HashMap;
 
+import Exceptions.InsufficientCredit;
+
 public class FullMyTi extends Ticket{
 
 	public FullMyTi(String id) {super(id);}
@@ -25,6 +27,17 @@ public class FullMyTi extends Ticket{
 			double newCredit = credit + amt;
 			fullMyTis.get(id).setCredit(newCredit);
 	}
+			
+	public static void buy(String id,double cost) throws InsufficientCredit {
+		double credit= fullMyTis.get(id).getCredit();
+		if(cost <= credit) {
+			double newCredit = credit - cost;
+			fullMyTis.get(id).setCredit(newCredit);
+			
+			}
+		else throw new InsufficientCredit(null);
+	}
+	
 	
 
 

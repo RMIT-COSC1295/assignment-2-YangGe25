@@ -3,6 +3,8 @@ package MyTicket;
 import java.util.HashMap;
 import java.util.Set;
 
+import Exceptions.InsufficientCredit;
+
 public class SeniorMyTi extends Ticket implements Consession{
 
 	public SeniorMyTi(String id) {super(id);}
@@ -28,19 +30,28 @@ public class SeniorMyTi extends Ticket implements Consession{
 			seniorMyTis.get(id).setCredit(newCredit);
 	}
 	
+	public static void buy(String id,double cost) throws InsufficientCredit {
+		double credit= seniorMyTis.get(id).getCredit();
+		if(cost <= credit) {
+			double newCredit = credit - cost;
+			seniorMyTis.get(id).setCredit(newCredit);
+			
+			}
+		else throw new InsufficientCredit(null);
+	}
+	
 
 
-	@Override
 	public double getDiscountRate() {
 		// TODO Auto-generated method stub
-		return 0;
+		return discountRate;
 	}
-
 
 	@Override
 	public void setDiscountRate(double d) {
 		// TODO Auto-generated method stub
 		
 	}
+	
 
 }

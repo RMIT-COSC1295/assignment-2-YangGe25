@@ -108,16 +108,16 @@ public class MyTiSystem {
 		if (!days.contains(day)) {System.out.println("Please enter a valid day!");return;}
 		// check if the station is valid
 		System.out.println("Departure time: ");
-		int startTime;
-		try {startTime = Integer.parseInt(sc.next());} catch(Exception e) {System.out.println("Please enter a valid time!");return;}
-		if (startTime < 0 || startTime>2359) {System.out.println("Please enter a valid time!");return;}
+		int departureTime;
+		try {departureTime = Integer.parseInt(sc.next());} catch(Exception e) {System.out.println("Please enter a valid time!");return;}
+		if (departureTime < 0 || departureTime>=2359) {System.out.println("Please enter a valid time!");return;}
 		System.out.println("Arrival time: ");
-		int endTime;
-		try {endTime = Integer.parseInt(sc.next());} catch(Exception e) {System.out.println("Please enter a valid time!");return;}
-		if (endTime < 0 || endTime>2359) {System.out.println("Please enter a valid time!");return;}
-		if (startTime >= endTime) {System.out.println("Departure time must be prior to arrival time!");return;}
+		int arrivalTime;
+		try {arrivalTime = Integer.parseInt(sc.next());} catch(Exception e) {System.out.println("Please enter a valid time!");return;}
+		if (arrivalTime <= 0 || arrivalTime>2359) {System.out.println("Please enter a valid time!");return;}
+		if (departureTime >= arrivalTime) {System.out.println("Departure time must be prior to arrival time!");return;}
 		
-		TravelPass.purchase(id, type, startStation, endStation, startTime, endTime, day);
+		TravelPass.purchase(id, type, startStation, endStation, departureTime, arrivalTime, day);
 	}
 	
 	static void recharge() {
@@ -144,6 +144,7 @@ public class MyTiSystem {
 			else if (type == "Junior") {JuniorMyTi.topUp(id,amt);}
 			else if (type == "Senior") {SeniorMyTi.topUp(id,amt);}
 			System.out.printf("Successfully added %.2f to %s\n", amt, id);
+			TravelPass.showRemainingCredit(id,type);
 		}
 		} catch(Exception e) {System.out.println("Please enter an integer!");}
 		
@@ -166,8 +167,11 @@ public class MyTiSystem {
 		
 	}
 	
+	/*
+	 *  Display all journeys (purchased or not) of all users
+	 */
 	static void printUserReports() {
-		System.out.println("4");
+		User.userReport();
 	}
 	
 	
