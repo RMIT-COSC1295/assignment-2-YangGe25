@@ -45,15 +45,4 @@ public class JuniorMyTi extends Ticket implements Consession{
 		return discountRate;
 		}
 
-	@Override
-	public void setDiscountRate(double d) {
-		// TODO Auto-generated method stub
-		
-	}
-	public static void main(String[] args) {
-		JuniorMyTi juniorMyTi = new JuniorMyTi(null);
-		System.out.println(juniorMyTi.getDiscountRate());
-	}
-
-
 }

@@ -46,12 +46,4 @@ public class SeniorMyTi extends Ticket implements Consession{
 		// TODO Auto-generated method stub
 		return discountRate;
 	}
-
-	@Override
-	public void setDiscountRate(double d) {
-		// TODO Auto-generated method stub
-		
-	}
-	
-
 }
