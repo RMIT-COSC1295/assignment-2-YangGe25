@@ -79,7 +79,7 @@ public class MyTiSystem {
 		System.out.println("3. Show remaining credit for a User");
 		System.out.println("4. Print User Reports");
 		System.out.println("5. Update price");
-		System.out.println("6. Show Station statistics");
+		System.out.println("6. Show Station Statistics");
 		System.out.println("7. Add a new User");
 		System.out.println("8. Quit");
 		System.out.println("Your option: ");
@@ -252,7 +252,7 @@ public class MyTiSystem {
 		System.out.println("Type:(Choose from Adult,Junior and Senior) ");
 		String type= sc.next().strip();
 				
-		ArrayList<String> lst = new ArrayList();
+		ArrayList<String> lst = new ArrayList<String>();
 		lst.add("Adult");
 		lst.add("Senior");
 		lst.add("Junior");

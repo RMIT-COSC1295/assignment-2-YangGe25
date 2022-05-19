@@ -58,12 +58,15 @@ public class TravelPass {
 	 */
 	
 	public static void purchase(String id,String type,String startStation,String endStation,int departureTime,int arrivalTime,String day) {
-		String period = computePeriod(departureTime,arrivalTime);//a a
-		String zones = computeZones(startStation,endStation);//a a
+		String period = computePeriod(departureTime,arrivalTime);
+		String zones = computeZones(startStation,endStation);
 		double price = computePrice(period,zones);
 		double rate = computeDiscount(type,day);
-		int startTime = 0;int endTime = 0;double cost = price * (1-rate);
-		boolean valid = false;boolean purchaseFail = true;
+		int startTime = 0;
+		int endTime = 0;
+		double cost = price * (1-rate);
+		boolean valid = false;
+		boolean purchaseFail = true;
 		// if the user hasn't purchased a pass or he purchased a pass on another day, then he needs to buy anew pass
 		if ((purchases.containsKey(id) == false) || (!purchases.get(id).getDay().equals(day))) {
 			startTime = departureTime;
@@ -95,7 +98,7 @@ public class TravelPass {
 				else {endTime = 2359;newPeriod = "b";}
 				startTime =purchases.get(id).getStartTime();
 				if(!purchaseFail) {
-					TravelPass travelPass = new TravelPass(startTime,endTime,day,period,zones);
+					TravelPass travelPass = new TravelPass(startTime,endTime,day,newPeriod,zones);
 					purchases.put(id, travelPass);
 					record(id, startStation, endStation, departureTime, arrivalTime, day);}
 			}
@@ -188,47 +191,48 @@ public class TravelPass {
 	 *  (All Day,1) -> (All Day,1&2) || (All Day,2) -> (All Day,1&2) || (2 Hour,1&2) -> (All Day,1&2)
 	 */
 	public static boolean upgradePass(String id, String type, String period, String zones, double rate,int arrivalTime) {
-		String oldPeriod = purchases.get(id).getPeriod();String oldZones = purchases.get(id).getZones();
+		String oldPeriod = purchases.get(id).getPeriod();
+		String oldZones = purchases.get(id).getZones();
 		double cost =0;boolean purchaseFail = true;String message = null;int endTime = purchases.get(id).getEndTime();
 		if (oldPeriod.equals("a") && oldZones.equals("a")) {
 			if (zones.equals("a")) {
-				cost = (ALL_DAY_ZONE1 - TWO_HOUR_ZONE1) * rate;
+				cost = (ALL_DAY_ZONE1 - TWO_HOUR_ZONE1) * (1-rate);
 				message = String.format("2 Hour Zone 1 Pass upgraded to All Day Zone 1 Pass for %s for $%.2f\n",id,cost);
 				purchaseFail = buyPass(id,type,cost,message);}
 			else if (zones.equals("b") || zones.equals("c")) {
 				if (arrivalTime <= endTime) {
-					cost = (TWO_HOUR_ZONES12 - TWO_HOUR_ZONE1) * rate;
+					cost = (TWO_HOUR_ZONES12 - TWO_HOUR_ZONE1) * (1-rate);
 					message = String.format("2 Hour Zone 1 Pass upgraded to 2 Hour Zones 1&2 Pass for %s for $%.2f\n",id,cost);
 					purchaseFail = buyPass(id,type,cost,message);}
 				else {
-					cost = (ALL_DAY_ZONES12 - TWO_HOUR_ZONE1) * rate;
+					cost = (ALL_DAY_ZONES12 - TWO_HOUR_ZONE1) * (1-rate);
 					message = String.format("2 Hour Zone 1 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f\n",id,cost);
 					purchaseFail = buyPass(id,type,cost,message);}}}
 		else if (oldPeriod.equals("a") && oldZones.equals("b")) {
 			if (zones.equals("b")) {
-				cost = (ALL_DAY_ZONE2 - TWO_HOUR_ZONE2) * rate;
+				cost = (ALL_DAY_ZONE2 - TWO_HOUR_ZONE2) * (1-rate);
 				message = String.format("2 Hour Zone 2 Pass upgraded to All Day Zone 2 Pass for %s for $%.2f\n",id,cost);
 				purchaseFail = buyPass(id,type,cost,message);}
 			else if (zones.equals("a") || zones.equals("c")) {
 				if (arrivalTime <= endTime) {
-					cost = (TWO_HOUR_ZONES12 - TWO_HOUR_ZONE2) * rate;
+					cost = (TWO_HOUR_ZONES12 - TWO_HOUR_ZONE2) * (1-rate);
 					message = String.format("2 Hour Zone 2 Pass upgraded to 2 Hour Zones 1&2 Pass for %s for $%.2f\n",id,cost);
 					purchaseFail = buyPass(id,type,cost,message);}
 				else {
-					cost = (ALL_DAY_ZONES12 - TWO_HOUR_ZONE2) * rate;
+					cost = (ALL_DAY_ZONES12 - TWO_HOUR_ZONE2) * (1-rate);
 					message = String.format("2 Hour Zone 2 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f\n",id,cost);
 					purchaseFail = buyPass(id,type,cost,message);}}}
 		else if (oldPeriod.equals("b")) {
 			if (zones.equals("a")) {
-				cost = (ALL_DAY_ZONES12 - ALL_DAY_ZONE1) * rate;
+				cost = (ALL_DAY_ZONES12 - ALL_DAY_ZONE1) * (1-rate);
 				message = String.format("ALL DAY Zone 1 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f\n",id,cost);
 				purchaseFail = buyPass(id,type,cost,message);}
 			else if (zones.equals("b")) {
-				cost = (ALL_DAY_ZONES12 - ALL_DAY_ZONE2) * rate;
+				cost = (ALL_DAY_ZONES12 - ALL_DAY_ZONE2) * (1-rate);
 				message = String.format("ALL DAY Zone 2 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f\n",id,cost);
 				purchaseFail = buyPass(id,type,cost,message);}}
 		else if (oldZones.equals("c")) {
-				cost = (ALL_DAY_ZONES12 - TWO_HOUR_ZONES12) * rate;
+				cost = (ALL_DAY_ZONES12 - TWO_HOUR_ZONES12) * (1-rate);
 				message = String.format("2 Hour Zones 1&2 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f\n",id,cost);
 				purchaseFail = buyPass(id,type,cost,message);}
 		return purchaseFail;}
@@ -239,15 +243,24 @@ public class TravelPass {
 	public static boolean buyPass(String id, String type,double cost,String message) {
 		boolean purchaseFail = true;
 		if (type.equals("Adult")) {
-			try{FullMyTi.buy(id,cost);System.out.printf(message);showRemainingCredit(id,type);purchaseFail = false;
+			try{
+				FullMyTi.buy(id,cost);
+				System.out.printf(message);
+				showRemainingCredit(id,type);purchaseFail = false;
 			} catch (Exception e) {System.out.printf("%s doesn't have enough credit!\n",id);}
 		}
 		else if (type.equals("Junoir")) {
-			try{JuniorMyTi.buy(id,cost);System.out.printf(message);showRemainingCredit(id,type);purchaseFail = false;
+			try{
+				JuniorMyTi.buy(id,cost);
+				System.out.printf(message);
+				showRemainingCredit(id,type);purchaseFail = false;
 			} catch (Exception e) {System.out.printf("%s doesn't have enough credit!\n",id);}
 		}
 		else if (type.equals("Senior")) {
-			try{SeniorMyTi.buy(id,cost);System.out.printf(message);showRemainingCredit(id,type);purchaseFail = false;
+			try{
+				SeniorMyTi.buy(id,cost);
+				System.out.printf(message);
+				showRemainingCredit(id,type);purchaseFail = false;
 			} catch (InsufficientCredit e) {System.out.printf("%s doesn't have enough credit!\n",id);}
 		}
 		return purchaseFail;

@@ -1,21 +1,18 @@
 package Model;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
-import Exceptions.InsufficientCredit;
 import Exceptions.UserExists;
 import MyTicket.FullMyTi;
 import MyTicket.JuniorMyTi;
 import MyTicket.SeniorMyTi;
-import MyTicket.Ticket;
 
 public class User {
 	
 	private String id,name,type,email;
 	
 	static HashMap<String, User> users = new HashMap<String, User>();
-	static ArrayList<String> journeys = new ArrayList<String> ();
+	static HashMap<String, String> journeys = new HashMap<String, String> ();
 	
 	User(String id,String name,String type,String email){
 		this.id = id;
@@ -54,16 +51,22 @@ public class User {
 	// Record a journey of a user 
 	public static void addJourney(String id, String startStation, String endStation, int departureTime, int arrivalTime, String day) {
 		
-		String journey = String.format(" %3s | %10s -> %10s | %4d ->%4d | %3s\n",id,startStation,endStation,departureTime,arrivalTime,day) ;
-		journeys.add(journey);
+		
+		String journey = journeys.get(id);
+		if (journey != null) {
+			journey += String.format("%10s -> %10s | %4d ->%4d | %3s\n",startStation,endStation,departureTime,arrivalTime,day);
+		} else journey = String.format("%10s -> %10s | %4d ->%4d | %3s\n",startStation,endStation,departureTime,arrivalTime,day);
+		
+		journeys.put(id,journey);
 		
 	}
 	
 	// Print the journey record
 	public static void userReport() {
-		for(String journey:journeys) {
-			System.out.printf(journey);
+		for(String id:journeys.keySet()) {
+			System.out.println("Journeys taken by " + id +":");
+			System.out.printf(journeys.get(id));
 		}
 	}
 
-	}
+}
