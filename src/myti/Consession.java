@@ -1,4 +1,4 @@
-package MyTicket;
+package myti;
 
 public interface Consession {
 	

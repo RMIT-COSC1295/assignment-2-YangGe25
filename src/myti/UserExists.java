@@ -1,4 +1,4 @@
-package Exceptions;
+package myti;
 
 public class UserExists extends Exception {
 	

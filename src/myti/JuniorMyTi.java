@@ -1,9 +1,6 @@
-package MyTicket;
+package myti;
 
 import java.util.HashMap;
-import java.util.Set;
-
-import Exceptions.InsufficientCredit;
 
 public class JuniorMyTi extends Ticket implements Consession{
 

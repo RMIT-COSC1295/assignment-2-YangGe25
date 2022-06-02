@@ -1,8 +1,6 @@
-package MyTicket;
+package myti;
 
 import java.util.HashMap;
-
-import Exceptions.InsufficientCredit;
 
 public class FullMyTi extends Ticket{
 

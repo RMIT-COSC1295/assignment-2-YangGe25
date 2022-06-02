@@ -1,4 +1,4 @@
-package Model;
+package myti;
 
 import java.util.HashMap;
 
