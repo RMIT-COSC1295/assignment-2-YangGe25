@@ -125,19 +125,19 @@ public class TravelPass {
 		if (type.equals("Adult")) {
 			message = buyPass(id,type,cost);
 			if (message == null) {
-			return String.format("%s %s Travel Pass purchased for %s for $%.2f\n",pPeriod,pZones,id,cost);	
+			return String.format("%s %s Pass purchased for %s for $%.2f\n",pPeriod,pZones,id,cost);	
 			}
 		}
 		else if (type.equals("Junior")) {
 			message = buyPass(id,type,cost);
 			if (message == null) {
-			return String.format("%s %s (Junior) Travel Pass purchased for %s for $%.2f\n",pPeriod,pZones,id,cost);	
+			return String.format("%s %s (Junior) Pass purchased for %s for $%.2f\n",pPeriod,pZones,id,cost);	
 			}
 		}
 		else if (type.equals("Senior")) {
 			message = buyPass(id,type,cost);
 			if (message == null) {
-			return String.format("%s %s (Senior) Travel Pass purchased for %s for $%.2f\n",pPeriod,pZones,id,cost);	
+			return String.format("%s %s (Senior) Pass purchased for %s for $%.2f\n",pPeriod,pZones,id,cost);	
 			}
 		}
 		return message;
@@ -179,7 +179,7 @@ public class TravelPass {
 				cost = (ALL_DAY_ZONE1 - TWO_HOUR_ZONE1) * (1-rate);
 				message = buyPass(id,type,cost);
 				if (message == null) {
-				return String.format("2 Hour Zone 1 Pass upgraded to All Day Zone 1 Pass for %s for $%.2f\n",id,cost);	
+				return String.format("2Hour Zone1 upgraded to AllDay Zone1 for %s for $%.2f\n",id,cost);	
 				}
 			}
 			else if (zones.equals("b") || zones.equals("c")) {
@@ -187,14 +187,14 @@ public class TravelPass {
 					cost = (TWO_HOUR_ZONES12 - TWO_HOUR_ZONE1) * (1-rate);
 					message = buyPass(id,type,cost);
 					if (message == null) {
-						return String.format("2 Hour Zone 1 Pass upgraded to 2 Hour Zones 1&2 Pass for %s for $%.2f\n",id,cost);
+						return String.format("2Hour Zone1 upgraded to 2Hour Zones1&2 for %s for $%.2f\n",id,cost);
 						}
 					}
 				else {
 					cost = (ALL_DAY_ZONES12 - TWO_HOUR_ZONE1) * (1-rate);
 					message = buyPass(id,type,cost);
 					if (message == null) {
-						return String.format("2 Hour Zone 1 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f\n",id,cost);	
+						return String.format("2Hour Zone1 upgraded to AllDay Zones1&2 for %s for $%.2f\n",id,cost);	
 						}
 					}
 				}
@@ -204,7 +204,7 @@ public class TravelPass {
 				cost = (ALL_DAY_ZONE2 - TWO_HOUR_ZONE2) * (1-rate);
 				message = buyPass(id,type,cost);
 				if (message == null) {
-					return String.format("2 Hour Zone 2 Pass upgraded to All Day Zone 2 Pass for %s for $%.2f\n",id,cost);
+					return String.format("2Hour Zone2 upgraded to AllDay Zone2 for %s for $%.2f\n",id,cost);
 					}
 			}
 				
@@ -213,14 +213,14 @@ public class TravelPass {
 					cost = (TWO_HOUR_ZONES12 - TWO_HOUR_ZONE2) * (1-rate);
 					message = buyPass(id,type,cost);
 					if (message == null) {
-						return String.format("2 Hour Zone 2 Pass upgraded to 2 Hour Zones 1&2 Pass for %s for $%.2f\n",id,cost);	
+						return String.format("2Hour Zone2 upgraded to 2Hour Zones1&2 for %s for $%.2f\n",id,cost);	
 					}
 				}
 				else {
 					cost = (ALL_DAY_ZONES12 - TWO_HOUR_ZONE2) * (1-rate);
 					message = buyPass(id,type,cost);
 					if (message == null) {
-						return String.format("2 Hour Zone 2 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f\n",id,cost);
+						return String.format("2Hour Zone2 upgraded to AllDay Zones1&2 for %s for $%.2f\n",id,cost);
 						}
 					}
 			}
@@ -230,14 +230,14 @@ public class TravelPass {
 				cost = (ALL_DAY_ZONES12 - ALL_DAY_ZONE1) * (1-rate);
 				message = buyPass(id,type,cost);
 				if (message == null) {
-					return String.format("ALL DAY Zone 1 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f",id,cost);
+					return String.format("ALLDAY Zone1 upgraded to AllDay Zones1&2 for %s for $%.2f",id,cost);
 				}
 			}
 			else if (zones.equals("b")) {
 				cost = (ALL_DAY_ZONES12 - ALL_DAY_ZONE2) * (1-rate);
 				message = buyPass(id,type,cost);
 				if (message == null) {
-					return String.format("ALL DAY Zone 2 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f",id,cost);
+					return String.format("ALLDAY Zone2 upgraded to AllDay Zones1&2 for %s for $%.2f",id,cost);
 					}
 				}
 		}
@@ -245,7 +245,7 @@ public class TravelPass {
 				cost = (ALL_DAY_ZONES12 - TWO_HOUR_ZONES12) * (1-rate);
 				message = buyPass(id,type,cost);
 				if (message == null) {
-					return String.format("2 Hour Zones 1&2 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f",id,cost);
+					return String.format("2Hour Zones1&2 upgraded to All Day Zones1&2 for %s for $%.2f",id,cost);
 				}
 		}
 		return message;}
@@ -313,16 +313,16 @@ public class TravelPass {
 	
 	public static String printPeriod(String period) {
 		String pPeriod = null;
-		if (period.equals("a")) {pPeriod = "2 Hour";}
-		else if (period.equals("b")) {pPeriod = "All Day";}
+		if (period.equals("a")) {pPeriod = "2Hour";}
+		else if (period.equals("b")) {pPeriod = "AllDay";}
 		return pPeriod;
 	}
 	
 	public static String printZones(String zones) {
 		String pZones = null;
-		if (zones.equals("a")) {pZones = "Zone 1";}
-		else if (zones.equals("b")) {pZones = "Zone 2";}
-		else if (zones.equals("c")) {pZones = "Zones 1 and 2";}
+		if (zones.equals("a")) {pZones = "Zone1";}
+		else if (zones.equals("b")) {pZones = "Zone2";}
+		else if (zones.equals("c")) {pZones = "Zones1&2";}
 		return pZones;
 	}
 	

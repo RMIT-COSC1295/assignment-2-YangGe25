@@ -202,7 +202,7 @@ public class ManageUsers extends Application{
 
 	public static void main(String[] args) throws UserExists  {
 		
-		ReadFile.readUser("src/User.txt");
+		ReadFile.readUser(args[0]);
 		
 		Application.launch(args);
 

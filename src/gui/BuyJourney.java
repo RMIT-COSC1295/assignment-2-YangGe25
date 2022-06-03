@@ -172,11 +172,12 @@ public class BuyJourney extends Application{
 
 	public static void main(String[] args) throws UserExists {
 		
-		ReadFile.readPrice("src/Price.txt");
-		ReadFile.readStation("src/Station.txt");
-		ReadFile.readUser("src/User.txt");
-		ReadFile.readJourney("src/Journey.txt");
-		ReadFile.readPurchase("src/Purchase.txt");
+		ReadFile.readPrice(args[0]);
+		ReadFile.readStation(args[1]);
+		ReadFile.readUser(args[2]);
+		ReadFile.readJourney(args[3]);
+		ReadFile.readPurchase(args[4]);
+		
 		
 		Application.launch(args);
 

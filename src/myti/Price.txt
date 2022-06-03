@@ -1,0 +1,6 @@
+2Hour:Zone1:2.50
+AllDay:Zone1:4.90
+2Hour:Zone2:2.50
+AllDay:Zone2:4.90
+2Hour:Zone12:3.50
+AllDay:Zone12:6.80

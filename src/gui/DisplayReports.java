@@ -77,7 +77,7 @@ public class DisplayReports extends Application {
 
 	public static void main(String[] args) throws UserExists {
 		
-		ReadFile.readJourney("src/Journey.txt");
+		ReadFile.readJourney(args[0]);
 		
 		Application.launch(args);
 
