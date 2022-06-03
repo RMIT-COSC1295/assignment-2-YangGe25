@@ -2,10 +2,14 @@ package fileio;
 
 import java.io.PrintWriter;
 
+import myti.TravelPass;
 import myti.User;
 
 public class SaveFile {
 	
+    /*
+     *  Rewrite the User.txt file with the updated user info
+     */
     public static void saveUser(String pathName) {
     	try {
     		PrintWriter pw = new PrintWriter(pathName);
@@ -27,7 +31,11 @@ public class SaveFile {
     		}
     	}
 
-    public static void saveRecord(String pathName) {
+    
+    /*
+     *  Rewrite the Journey.txt file with the updated journeys
+     */
+    public static void saveJourney(String pathName) {
     	try {
     		PrintWriter pw = new PrintWriter(pathName);
     		
@@ -41,14 +49,35 @@ public class SaveFile {
     		}
 			pw.close();
 			} catch (Exception e) {
-    		System.out.println("Fail to save Record.txt!");
+    		System.out.println("Fail to save Journey.txt!");
     		}
     	}    
     
-	public static void main(String[] args) {
-		ReadFile.readUser("src/User.txt");
-		saveUser("src/User.txt");
+    
+    /*
+     *  Rewrite the Purchase.txt file with the updated purchases
+     */
+    public static void savePurchase(String pathName) {
+    	try {
+    		PrintWriter pw = new PrintWriter(pathName);
+    		
+    		for(String id : TravelPass.purchases.keySet()) {
+    			
+    			String startTime = String.valueOf(TravelPass.purchases.get(id).getStartTime());
+    			String endTime = String.valueOf(TravelPass.purchases.get(id).getEndTime());
+    			String day = TravelPass.purchases.get(id).getDay();
+    			String period = TravelPass.purchases.get(id).getPeriod();
+    			String zones = TravelPass.purchases.get(id).getZones();
+    		
+    			String content = id+":"+startTime+":"+endTime+":"+day+":"+period+":"+zones+"\n";
+    			pw.write(content);
+    			pw.flush();
+    		}
+			pw.close();
+			} catch (Exception e) {
+    		System.out.println("Fail to save Purchase.txt!");
+    		}
+    	}   
 
-	}
 
 }

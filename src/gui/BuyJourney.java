@@ -30,6 +30,7 @@ public class BuyJourney extends Application{
 	@Override
 	public void start(Stage primaryStage) {	
 		
+		// Create a GridPane
 	    GridPane gp = new GridPane(); 
 	    gp.setAlignment(Pos.TOP_LEFT);
 	    gp.setPadding(new Insets(20,20,20,20));
@@ -39,6 +40,7 @@ public class BuyJourney extends Application{
 		// Label for User
 		Label label1 = new Label("User");
 		gp.add(label1, 0, 0);
+		
 		// ListView for User
 		ArrayList<String> userList = new ArrayList<String>();
 		for (String id:User.users.keySet()) {
@@ -53,6 +55,7 @@ public class BuyJourney extends Application{
 	    // Label for startStation
 	    Label label2 = new Label("From");
 	    gp.add(label2, 1, 0);
+	    
 		// ListView for startStation
 		ObservableList<String> stations = FXCollections.observableArrayList("Central", "Flagstaff", "Richmond", "Lilydale", "Epping");
 		ListView<String> lv2 = new ListView<String>(stations);
@@ -62,6 +65,7 @@ public class BuyJourney extends Application{
 	    // Label for endStation
 	    Label label3 = new Label("To");
 	    gp.add(label3, 2, 0);
+	    
 		// ListView for endStation
 		ListView<String> lv3 = new ListView<String>(stations);
 	    lv3.setMaxSize(80, 120);
@@ -70,6 +74,7 @@ public class BuyJourney extends Application{
 	    // Label for Day
 	    Label label4 = new Label("Day");
 	    gp.add(label4, 3, 0);
+	    
 		// ListView for Day
 		ObservableList<String> days = FXCollections.observableArrayList("Mon", "Tue", "Wed", "Thur", "Fri", "Sat", "Sun");
 		ListView<String> lv4 = new ListView<String>(days);
@@ -78,6 +83,7 @@ public class BuyJourney extends Application{
 		
 	    // Label for startTime
 		gp.add(new Label("     Start"), 0, 2);
+		
 		// TextField for inputting startTime
 		TextField tf1 = new TextField();
 		tf1.setPrefWidth(80);
@@ -85,6 +91,7 @@ public class BuyJourney extends Application{
 		
 		// Label for endtTime
 		gp.add(new Label("     End"), 2, 2);
+		
 		// TextField for inputting endTime
 		TextField tf2 = new TextField();
 		tf2.setPrefWidth(80);
@@ -92,13 +99,13 @@ public class BuyJourney extends Application{
 		
 		// TextField to display message
 		TextField  tf3 = new TextField ("Welcome to MyTi system!");
-		gp.add(tf3, 0, 4, 4, 4);		
+		gp.add(tf3, 0, 4, 5, 4);		
 		
 		// Button for purchase
 		Button btPurchase = new Button("Purchase");
 		btPurchase.setOnAction(e ->{
 			
-			// In case the admin doesn't select any parameter
+			// get invalid parameters for a journey
 			String id = lv1.getSelectionModel().getSelectedItem();
 			if(id == null) {
 				tf3.setText("Please select a user");return;
@@ -135,19 +142,22 @@ public class BuyJourney extends Application{
 				String message = TravelPass.purchase(id, startStation, endStation, departureTime, arrivalTime, day);
 				if (message != null) {
 					tf3.setText(message);	
-				} else tf3.setText("Insufficient Balance");
+				}
 				
 			}
 		});
 		gp.add(btPurchase, 0, 3);
 		
+		// button to save user info, purchases and journeys
 		Button btSave = new Button("Save");
 		btSave.setOnAction(e-> { 
 			SaveFile.saveUser("src/User.txt");
-			SaveFile.saveRecord("src/Record.txt");
+			SaveFile.saveJourney("src/Journey.txt");
+			SaveFile.savePurchase("src/Purchase.txt");
 			});
 		gp.add(btSave, 2, 8);
 		
+		// button to quit
 		Button btQuit = new Button("Quit");
 		gp.add(btQuit, 3, 8);
 		btQuit.setOnAction(e-> { 
@@ -161,10 +171,12 @@ public class BuyJourney extends Application{
 	}
 
 	public static void main(String[] args) throws UserExists {
+		
 		ReadFile.readPrice("src/Price.txt");
 		ReadFile.readStation("src/Station.txt");
 		ReadFile.readUser("src/User.txt");
-
+		ReadFile.readJourney("src/Journey.txt");
+		ReadFile.readPurchase("src/Purchase.txt");
 		
 		Application.launch(args);
 

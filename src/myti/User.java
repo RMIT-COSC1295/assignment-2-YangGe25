@@ -75,10 +75,10 @@ public class User {
 		
 		String journey = journeys.get(id);
 		if (journey != null) {
-			journey += startStation+":"+endStation+":"+departureTime+":"+arrivalTime+":"+day;
+			journey += startStation+":"+endStation+":"+departureTime+":"+arrivalTime+":"+day+"\n";
 			//journey += String.format("%10s -> %10s | %4d ->%4d | %3s\n",startStation,endStation,departureTime,arrivalTime,day);
 		} else 
-			journey = startStation+":"+endStation+":"+departureTime+":"+arrivalTime+":"+day;
+			journey = startStation+":"+endStation+":"+departureTime+":"+arrivalTime+":"+day+"\n";
 			//journey = String.format("%10s -> %10s | %4d ->%4d | %3s\n",startStation,endStation,departureTime,arrivalTime,day);
 		
 		journeys.put(id,journey);

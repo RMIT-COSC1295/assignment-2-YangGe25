@@ -23,7 +23,7 @@ public class TravelPass {
 	public static double TWO_HOUR_ZONES12;
 	public static double ALL_DAY_ZONES12;
 	
-	static HashMap<String,TravelPass> purchases = new HashMap<String,TravelPass>();
+	public static HashMap<String,TravelPass> purchases = new HashMap<String,TravelPass>();
 	
 	public int getStartTime() {return this.startTime;}
 	public int getEndTime() {return this.endTime;}
@@ -41,6 +41,16 @@ public class TravelPass {
 		else if(period.equals("2Hour") && zones.equals("Zone12")) {TWO_HOUR_ZONES12 = price;}
 		else if(period.equals("AllDay") && zones.equals("Zone12")) {ALL_DAY_ZONES12 = price;}
 	}
+	
+	public static void addPurchase(String id, int startTime, int endTime, String day, String period, String zones) {
+		
+		TravelPass travelPass = new TravelPass(startTime,endTime,day,period,zones);
+		
+		purchases.put(id, travelPass);
+	}
+	
+	
+	
 	/*
 	 * purchase is the main method in this class, it receive order from the GUI and decides what to do
 	 */
@@ -61,10 +71,11 @@ public class TravelPass {
 			startTime = departureTime;
 			if (period.equals("a")) {endTime = startTime + 200;}
 			else endTime = 2359;
-			TravelPass travelPass = new TravelPass(startTime,endTime,day,period,zones);
-			purchases.put(id, travelPass);
+			
 			newMessage = buyNewPass(id, type, period, zones, cost);
 			if(!newMessage.equals(String.format("%s doesn't have enough credit!\n",id))) {
+				TravelPass travelPass = new TravelPass(startTime,endTime,day,period,zones);
+				purchases.put(id, travelPass);
 				record(id, startStation, endStation, departureTime, arrivalTime, day);
 				}}
 		/*
@@ -85,10 +96,12 @@ public class TravelPass {
 				String newPeriod =null;
 				
 				newMessage = upgradePass(id, period, zones, rate, arrivalTime);
+				
 				int oldEndTime = purchases.get(id).getEndTime();
 				if ((oldZones.equals("a")||oldZones.equals("b")) && (zones.equals("c")) && (arrivalTime <= oldEndTime)) {endTime = oldEndTime;newPeriod = "a";}
 				else {endTime = 2359;newPeriod = "b";}
 				startTime =purchases.get(id).getStartTime();
+				
 				if(!newMessage.equals(String.format("%s doesn't have enough credit!\n",id))) {
 					TravelPass travelPass = new TravelPass(startTime,endTime,day,newPeriod,zones);
 					purchases.put(id, travelPass);
@@ -115,7 +128,7 @@ public class TravelPass {
 			return String.format("%s %s Travel Pass purchased for %s for $%.2f\n",pPeriod,pZones,id,cost);	
 			}
 		}
-		else if (type.equals("Junoir")) {
+		else if (type.equals("Junior")) {
 			message = buyPass(id,type,cost);
 			if (message == null) {
 			return String.format("%s %s (Junior) Travel Pass purchased for %s for $%.2f\n",pPeriod,pZones,id,cost);	
@@ -156,10 +169,10 @@ public class TravelPass {
 		String oldPeriod = purchases.get(id).getPeriod();
 		String oldZones = purchases.get(id).getZones();
 		String type = User.getUserType(id);
-		double cost =0;
+		double cost = 0;
 		int endTime = purchases.get(id).getEndTime();
 		
-		String message = null;
+		String message = String.format("%s doesn't have enough credit!\n",id);
 		
 		if (oldPeriod.equals("a") && oldZones.equals("a")) {
 			if (zones.equals("a")) {
@@ -168,27 +181,33 @@ public class TravelPass {
 				if (message == null) {
 				return String.format("2 Hour Zone 1 Pass upgraded to All Day Zone 1 Pass for %s for $%.2f\n",id,cost);	
 				}
+			}
 			else if (zones.equals("b") || zones.equals("c")) {
 				if (arrivalTime <= endTime) {
 					cost = (TWO_HOUR_ZONES12 - TWO_HOUR_ZONE1) * (1-rate);
 					message = buyPass(id,type,cost);
 					if (message == null) {
-						return String.format("2 Hour Zone 1 Pass upgraded to 2 Hour Zones 1&2 Pass for %s for $%.2f\n",id,cost);	
-					}
+						return String.format("2 Hour Zone 1 Pass upgraded to 2 Hour Zones 1&2 Pass for %s for $%.2f\n",id,cost);
+						}
 					}
 				else {
 					cost = (ALL_DAY_ZONES12 - TWO_HOUR_ZONE1) * (1-rate);
 					message = buyPass(id,type,cost);
 					if (message == null) {
 						return String.format("2 Hour Zone 1 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f\n",id,cost);	
-						}}}}
+						}
+					}
+				}
+			}
 		else if (oldPeriod.equals("a") && oldZones.equals("b")) {
 			if (zones.equals("b")) {
 				cost = (ALL_DAY_ZONE2 - TWO_HOUR_ZONE2) * (1-rate);
 				message = buyPass(id,type,cost);
 				if (message == null) {
-					return String.format("2 Hour Zone 2 Pass upgraded to All Day Zone 2 Pass for %s for $%.2f\n",id,cost);	
-				}
+					return String.format("2 Hour Zone 2 Pass upgraded to All Day Zone 2 Pass for %s for $%.2f\n",id,cost);
+					}
+			}
+				
 			else if (zones.equals("a") || zones.equals("c")) {
 				if (arrivalTime <= endTime) {
 					cost = (TWO_HOUR_ZONES12 - TWO_HOUR_ZONE2) * (1-rate);
@@ -196,12 +215,16 @@ public class TravelPass {
 					if (message == null) {
 						return String.format("2 Hour Zone 2 Pass upgraded to 2 Hour Zones 1&2 Pass for %s for $%.2f\n",id,cost);	
 					}
+				}
 				else {
 					cost = (ALL_DAY_ZONES12 - TWO_HOUR_ZONE2) * (1-rate);
 					message = buyPass(id,type,cost);
 					if (message == null) {
-						return String.format("2 Hour Zone 2 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f\n",id,cost);	
-					}}}}
+						return String.format("2 Hour Zone 2 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f\n",id,cost);
+						}
+					}
+			}
+		}
 		else if (oldPeriod.equals("b")) {
 			if (zones.equals("a")) {
 				cost = (ALL_DAY_ZONES12 - ALL_DAY_ZONE1) * (1-rate);
@@ -209,18 +232,22 @@ public class TravelPass {
 				if (message == null) {
 					return String.format("ALL DAY Zone 1 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f",id,cost);
 				}
+			}
 			else if (zones.equals("b")) {
 				cost = (ALL_DAY_ZONES12 - ALL_DAY_ZONE2) * (1-rate);
 				message = buyPass(id,type,cost);
 				if (message == null) {
 					return String.format("ALL DAY Zone 2 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f",id,cost);
-				}}
+					}
+				}
+		}
 		else if (oldZones.equals("c")) {
 				cost = (ALL_DAY_ZONES12 - TWO_HOUR_ZONES12) * (1-rate);
 				message = buyPass(id,type,cost);
 				if (message == null) {
 					return String.format("2 Hour Zones 1&2 Pass upgraded to All Day Zones 1&2 Pass for %s for $%.2f",id,cost);
-				}}}}}}}
+				}
+		}
 		return message;}
 	
 	/*
@@ -232,7 +259,7 @@ public class TravelPass {
 				FullMyTi.buy(id,cost);
 			} catch (Exception e) {return String.format("%s doesn't have enough credit!\n",id);}
 		}
-		else if (type.equals("Junoir")) {
+		else if (type.equals("Junior")) {
 			try{
 				JuniorMyTi.buy(id,cost);
 			} catch (Exception e) {return  String.format("%s doesn't have enough credit!\n",id);}
@@ -306,22 +333,6 @@ public class TravelPass {
 		User.addJourney(id, startStation, endStation, departureTime, arrivalTime, day);
 		Station.addStartCount(startStation);Station.addEndCount(endStation);
 	}
-	
-	public static void main(String[] args) throws UserExists {
-		User.addUser("lc", "Lawrence Cavedon",  "Senior", "lawrence.cavedon@rmit.edu.au");
-		User.addUser("vm", "Vu Mai", "Adult", "vuhuy.mai@rmit.edu.au");
-		User.userRecharge("lc", 20);
-		User.userRecharge("vm", 30);
-		
-		Station.addStation("Central", 1);
-		Station.addStation("Flagstaff", 1);
-		Station.addStation("Richmond", 1);
-		Station.addStation("Lilydale", 2);
-		Station.addStation("Epping", 2);
-		
-		System.out.println(buyPass("lc","Senior",1));
-		
-		
-	}
+
 
 }

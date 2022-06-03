@@ -1,6 +1,7 @@
 package fileio;
 
 import java.io.BufferedReader;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.InputStreamReader;
@@ -89,30 +90,60 @@ public class ReadFile {
     }
 
     /*
-     *  Read the Record.txt file and initialize the price
+     *  Read the Journey.txt file, which stores all the journeys taken by user
      */
-    public static void readRecord(String pathName) {
+    public static void readJourney(String pathName){
     	try {
     		File fileName = new File(pathName);
     		InputStreamReader reader = new InputStreamReader(new FileInputStream(fileName));
     		BufferedReader br = new BufferedReader(reader);
-    		String line = "";
-    		line = br.readLine();
+    		String line = br.readLine();
+    		
+    		while(line != null && line.length() != 0) {
+    			String id = "";
+    			String content = "";
+    			if (line.startsWith("#")) {
+    				id = line.replace("#","");
+    				line = br.readLine();
+    			}
+    			while (line != null && (!line.startsWith("#"))) {
+    				content += line+"\n";
+    				line = br.readLine();
+    				}
+    			User.journeys.put(id, content);
+    			}
+    		br.close();
+    		}catch (Exception e) {System.out.println("Fail to read Journey.txt");} 
+    }
+
+    
+    /*
+     *  Read the Purchase.txt file, which stores the travel pass purchased by user
+     */
+    public static void readPurchase(String pathName){
+    	try {
+    		File fileName = new File(pathName);
+    		InputStreamReader reader = new InputStreamReader(new FileInputStream(fileName));
+    		BufferedReader br = new BufferedReader(reader);
+    		String line = br.readLine();
+    		
     		while(line != null && line.length() != 0) {
     			
-    			if (line.startsWith("#")) {
-    				
-    			}
+    			String[] purchase = line.split(":");
     			
+    			String id = purchase[0]; 
+    			int startTime = Integer.parseInt(purchase[1]);
+    			int endTime = Integer.parseInt(purchase[2]);
+    			String day = purchase[3]; 
+    			String period = purchase[4]; 
+    			String zones = purchase[5]; 
+    			
+    			TravelPass.addPurchase(id,startTime,endTime,day,period,zones);
     			line = br.readLine();
     			}
     		br.close();
-    		} catch (Exception e) {
-    			System.out.println("Fail to read Record.txt");
-    	}   	
-    }
-	public static void main(String[] args) {
-		readUser("src/User.txt");
-	}
+    		} catch (Exception e) {System.out.println("Fail to read Purchase.txt");}   	
+    }    
+    
 
 }

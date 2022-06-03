@@ -30,6 +30,7 @@ public class ManageUsers extends Application{
 	
 	@Override
 	public void start(Stage primaryStage) {
+		
 		// Create a gridpane
 	    GridPane gp = new GridPane(); 
 	    gp.setAlignment(Pos.TOP_LEFT);
@@ -143,10 +144,10 @@ public class ManageUsers extends Application{
 		gp.add(lv, 4, 3);
 		
 
-		
+		// button to create a user
 		Button btCreateUser = new Button("Create User");
 		btCreateUser.setOnAction(e ->{
-			
+			// get valid user information
 			String id = tf3.getText();
 			if(id.length() == 0) {
 				tf2.setText("Please enter the ID");return;
@@ -176,12 +177,14 @@ public class ManageUsers extends Application{
 		});
 		gp.add(btCreateUser, 4, 5);
 		
+		// button to save user info
 		Button btSave = new Button("Save");
 		btSave.setOnAction(e-> { 
 			SaveFile.saveUser("src/User.txt");
 			});
 		gp.add(btSave, 3, 6);
 		
+		// button to quit
 		Button btQuit = new Button("Quit");
 		gp.add(btQuit, 4, 6);
 		btQuit.setOnAction(e-> { 
@@ -198,6 +201,7 @@ public class ManageUsers extends Application{
 
 
 	public static void main(String[] args) throws UserExists  {
+		
 		ReadFile.readUser("src/User.txt");
 		
 		Application.launch(args);
